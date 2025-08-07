@@ -62,6 +62,8 @@ export default function Vote() {
     }
   }, []);
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const handleSubmit = async () => {
     const trimmedName = fullName.trim();
 
@@ -107,7 +109,7 @@ export default function Vote() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/vote", {
+      const response = await fetch(`${API_BASE}/api/vote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

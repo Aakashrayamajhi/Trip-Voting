@@ -12,6 +12,7 @@ import {
   Calendar,
   Send,
   MessageSquare,
+  X,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
@@ -19,7 +20,6 @@ import autoTable from "jspdf-autotable";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Results() {
-  // Vote type based on your backend response structure
   type Vote = {
     _id?: string;
     id?: string;
@@ -43,27 +43,38 @@ export default function Results() {
   >([{ user: "TravelBot", message: "Welcome to the trip discussion! 🌍✈️" }]);
   const [chatInput, setChatInput] = useState("");
   const [showChat, setShowChat] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Replace this with your actual backend API base URL
-  const API_BASE = "/api/vote";
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     fetchStats();
     fetchAllVotes();
   }, []);
 
+  // Auto-scroll to bottom when messages change or chat opens
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatMessages]);
+    if (chatMessages.length > 0) {
+      scrollToBottom();
+    }
+  }, [chatMessages, showChat]);
 
-  // Fetch stats from backend /stats endpoint
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const fetchStats = async () => {
     try {
-      const res = await fetch(`${API_BASE}/stats`);
+      const res = await fetch(`${API_BASE}/api/vote/stats`);
       if (!res.ok) throw new Error("Failed to fetch stats");
       const data = await res.json();
       setStats({
@@ -82,14 +93,12 @@ export default function Results() {
     }
   };
 
-  // Fetch all votes from backend /all endpoint
   const fetchAllVotes = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`${API_BASE}/all`);
+      const res = await fetch(`${API_BASE}/api/vote/all`);
       if (!res.ok) throw new Error("Failed to fetch votes");
       const data = await res.json();
-      // Map backend fields to frontend state fields if needed:
       const formattedVotes = data.map((vote: any) => ({
         id: vote._id || vote.id,
         fullName: vote.fullName || vote.full_name,
@@ -160,77 +169,50 @@ export default function Results() {
     setChatInput("");
 
     setTimeout(() => {
-      // Responses object with arrays of possible replies per category
       const responses: { [key: string]: string[] } = {
         thailand: [
           "Thailand ek popular South East Asian country ho jasle beaches, temples, ra nightlife ko lagi chinieko xa. Bangkok, Phuket, Pattaya jasta thau haru dherai famous chan.",
           "Thailand ma dherai ramailo beaches ra temple haru chan. Ghumna janey haru lai manparcha.",
           "Thailand ekdam famous cha party ra tourism ko lagi, tapaslai pani ramailo huncha.",
-          "ea pagal ja jani ho ja malai na sodh",
-          "tw pagal ho",
-          "ghar ja",
-          "tero passport nai bandaina heyram la kasari janxas"
         ],
-
         goa: [
           "Goa India ko ekdam popular tourist destination ho jaha beaches, parties, casinos, ani shanti environment ko maja lina sakincha.",
           "Goa ko beach party sabai lai manparcha, shanti pani cha tyo thau ma.",
           "Goa ma majaa garna sakinchha, beaches ra nightlife dherai ramro cha.",
-          "ea pagal ja jani ho ja malai na sodh",
-          "tw pagal ho",
-          "ghar ja"
         ],
         manali: [
           "Manali ek hill station ho India ma, mostly couples, friends, ani adventure lovers haru ko lagi. Snow, trekking, paragliding, rafting sabai manparcha vane ghumna ja manparcha.",
           "Manali ko thau haru dherai ramro chan, snow pani pugdacha winter ma.",
           "Manali trekking ra adventure sports ko lagi ek ramro thau ho.",
-          "theek xa dost yai thau ma ja ramro xa "
         ],
         bestPlace: [
           "Timi ghumna jaane sochda chau vane: Thailand for beaches, Goa for party vibes, Manali for hills & snow. Budget anusar suggestion dinu parcha vane sodh na.",
           "Ka janey plan cha bhane clear bhaye ma ramro suggestion dinchu. Timi lai kati din ko plan cha?",
           "Ramro ghumne thau chahiyo bhane tyo destination anusar kura garna sakincha.",
-          "ea pagal ja jani ho ja malai na sodh",
-          "tw pagal ho",
-
         ],
         greetings: [
           "Namaste! Kasto xa? Ghumna jane plan xa?",
           "Hello! K garira chau? Travel ko plan cha?",
           "Hi! TravelBot ma tapailai swagat cha.",
-          "lala yrr",
-          "tw pagal ho",
-
         ],
         thanks: [
           "You're welcome! Aru kura sodhna free chau.",
           "Dhanyabad! Kati ramro kura bhayo kura garera.",
           "Sadaiva khusi hunu hola! Aru sodhnus.",
-          "ok boss",
-          "tw pagal ho",
-
         ],
         chatbotInfo: [
           "Yes, ma ek travel assistant chatbot hu. Ghumna sambandhi jankari dinchu.",
           "Ma chatbot hu, travel related questions ko help garna sakchu.",
           "TravelBot ho, jasle travel ko bare ma madat garna chahe.",
-          "bye nindro layo malai",
-          "tw pagal ho",
-
         ],
         fallback: [
           "Maile bujhina. Please aru clearly sodhna sakxau?",
           "Sorry, malai thaha chhaina tesko barema.",
           "Tesko barema malai janakari chhaina, aru sodhnus na.",
-          "tw pagal ho",
-          "ja jana manxa ja malai sutna de",
-          "malai thailand , manali , goa ko bare ma matrai sodh",
-          "baire kura sodhni vaye chatgpt lai sodh malai na chat"
-
+          "Malai thailand, manali, goa ko bare ma matrai sodha.",
         ],
       };
 
-      // Function to select random response from array
       const randomReply = (arr: string[]) =>
         arr[Math.floor(Math.random() * arr.length)];
 
@@ -242,10 +224,7 @@ export default function Results() {
         userMessage.includes("थाईल्यान्ड")
       ) {
         botResponse = randomReply(responses.thailand);
-      } else if (
-        userMessage.includes("goa") ||
-        userMessage.includes("गोवा")
-      ) {
+      } else if (userMessage.includes("goa") || userMessage.includes("गोवा")) {
         botResponse = randomReply(responses.goa);
       } else if (
         userMessage.includes("manali") ||
@@ -297,14 +276,80 @@ export default function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4 md:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4 md:p-6 relative">
+      {/* Mobile Chat Overlay */}
+      {showChat && (
+        <div className="fixed inset-0 z-50 lg:hidden bg-black/50 backdrop-blur-sm">
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-xl flex flex-col h-[70vh]">
+            <div className="p-4 border-b flex items-center justify-between">
+              <h3 className="font-semibold text-primary flex items-center gap-2">
+                <MessageSquare className="h-4 w-4" /> Travel Chat
+              </h3>
+              <button onClick={() => setShowChat(false)}>
+                <X className="h-5 w-5 text-muted-foreground" />
+              </button>
+            </div>
+            <div
+              ref={chatContainerRef}
+              className="flex-1 overflow-y-auto p-4 space-y-3"
+            >
+              {chatMessages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex gap-2 ${msg.user === "You" ? "justify-end" : ""
+                    }`}
+                >
+                  {msg.user !== "You" && (
+                    <Avatar className="h-8 w-8 mt-1">
+                      <AvatarFallback>
+                        {msg.user === "TravelBot" ? "TB" : msg.user.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div
+                    className={`p-3 rounded-lg max-w-[80%] ${msg.user === "You"
+                      ? "bg-primary text-white rounded-br-none"
+                      : "bg-muted/30 rounded-bl-none"
+                      }`}
+                  >
+                    {msg.user === "TravelBot" && (
+                      <span className="block text-xs mb-1 text-muted-foreground">
+                        TravelBot
+                      </span>
+                    )}
+                    <p className="text-sm">{msg.message}</p>
+                  </div>
+                </div>
+              ))}
+              <div ref={chatEndRef} />
+            </div>
+            <div className="p-3 border-t flex gap-2">
+              <Input
+                placeholder="Type your message..."
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
+                className="flex-1"
+              />
+              <Button onClick={handleChatSend} size="sm">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Floating Chat Button */}
       <Button
         onClick={() => setShowChat(!showChat)}
-        className="fixed bottom-6 right-6 z-50 md:hidden rounded-full w-14 h-14 shadow-xl"
+        className="fixed bottom-6 right-6 z-40 rounded-full w-14 h-14 shadow-xl lg:hidden"
         size="icon"
       >
-        <MessageSquare className="h-6 w-6" />
+        {showChat ? (
+          <X className="h-5 w-5" />
+        ) : (
+          <MessageSquare className="h-5 w-5" />
+        )}
       </Button>
 
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
@@ -430,13 +475,14 @@ export default function Results() {
         </div>
 
         {/* Chat Sidebar (Desktop) */}
-        <div className="hidden lg:flex flex-col w-73 justify-center bg-white rounded-xl shadow-lg border border-muted/20">
-          <div className="p-5 border-b font-semibold text-primary flex items-center gap-2">
-            <MessageSquare className="h-4 w-4" /> Chat Bot
+        <div className="hidden lg:flex flex-col w-80 bg-white rounded-xl shadow-lg border border-muted/20 h-fit sticky top-6">
+          <div className="p-4 border-b font-semibold text-primary flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" /> Travel Chat
           </div>
           <div
-            className="flex-1 overflow-y-auto p-3 space-y-2"
-            style={{ maxHeight: 410 }}
+            ref={chatContainerRef}
+            className="flex-1 overflow-y-auto p-4 space-y-3"
+            style={{ maxHeight: "calc(100vh - 200px)", minHeight: "400px" }}
           >
             {chatMessages.map((msg, i) => (
               <div
@@ -444,13 +490,17 @@ export default function Results() {
                 className={`flex gap-2 ${msg.user === "You" ? "justify-end" : ""
                   }`}
               >
-                {msg.user !== "You" && msg.user !== "TravelBot" && (
-                  <Avatar className="h-6 w-6 mt-1">
-                    <AvatarFallback>{msg.user.charAt(0)}</AvatarFallback>
+                {msg.user !== "You" && (
+                  <Avatar className="h-8 w-8 mt-1">
+                    <AvatarFallback>
+                      {msg.user === "TravelBot" ? "TB" : msg.user.charAt(0)}
+                    </AvatarFallback>
                   </Avatar>
                 )}
                 <div
-                  className={`p-2 rounded-lg max-w-[75%] ${msg.user === "You" ? "bg-primary text-white" : "bg-muted/30"
+                  className={`p-3 rounded-lg max-w-[80%] ${msg.user === "You"
+                    ? "bg-primary text-white rounded-br-none"
+                    : "bg-muted/30 rounded-bl-none"
                     }`}
                 >
                   {msg.user === "TravelBot" && (
@@ -458,22 +508,22 @@ export default function Results() {
                       TravelBot
                     </span>
                   )}
-                  {msg.message}
+                  <p className="text-sm">{msg.message}</p>
                 </div>
               </div>
             ))}
-            <div ref={chatEndRef}></div>
+            <div ref={chatEndRef} />
           </div>
-          <div className="p-2 border-t  flex mt-9 gap-2">
+          <div className="p-3 border-t flex gap-2">
             <Input
-              placeholder="Message..."
+              placeholder="Type your message..."
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
-              className="flex-1 h-29 text-sm"
+              className="flex-1"
             />
-            <Button onClick={handleChatSend} size="icon" className="h-8 w-8">
-              <Send className="h-3.5 w-3.5" />
+            <Button onClick={handleChatSend} size="sm">
+              <Send className="h-4 w-4" />
             </Button>
           </div>
         </div>
