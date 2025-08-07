@@ -1,0 +1,61 @@
+# Node modules (required for all Node.js projects)
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+.env.*          # for .env.development, .env.production, etc.
+
+# Coverage reports
+coverage/
+
+# OS files
+.DS_Store
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Debugging files
+*.tgz
+*.gz
+*.zip
+*.bak
+
+# PM2 logs and dumps
+pids/
+*.log
+*.pid
+dump.rdb
+*.pm2
+
+# Optional: Ignore SQLite or other local DBs
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+
+# Optional: Ignore uploads (if stored locally)
+uploads/
