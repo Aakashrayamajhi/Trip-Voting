@@ -16,6 +16,7 @@ import ManaliDetails from "./pages/ManaliDetails";
 import GoaDetails from "./pages/GoaDetails";
 import Vote from "./pages/Vote";
 import Results from "./pages/Results";
+import ProtectedVoteRoute from "./components/ProtectedVoteRoute";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,14 @@ const router = createBrowserRouter(
     { path: "/thailand", element: <ThailandDetails /> },
     { path: "/manali", element: <ManaliDetails /> },
     { path: "/goa", element: <GoaDetails /> },
-    { path: "/vote", element: <Vote /> },
+    {
+      path: "/vote",
+      element: (
+        <ProtectedVoteRoute>
+          <Vote />
+        </ProtectedVoteRoute>
+      )
+    },
     { path: "/results", element: <Results /> },
     { path: "/old", element: <Index /> },
     { path: "*", element: <NotFound /> },
