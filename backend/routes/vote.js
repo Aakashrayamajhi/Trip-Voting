@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
         // Check by deviceId (one vote per device)
         const votedByDevice = await VoteModel.findOne({ deviceId });
         if (votedByDevice) {
-            return res.status(400).json({ message: "You have already voted from this device." });
+            return res.status(400).json({ message: "You have already voted very chalakh bro:)" });
         }
 
         // Check by fullName case-insensitive (one vote per name)
