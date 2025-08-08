@@ -90,10 +90,12 @@ export default function Landing() {
           <p className="text-xl md:text-2xl opacity-90 mb-6 max-w-2xl mx-auto">
             Discover, compare, and choose your perfect getaway with real pricing
           </p>
-          <div className="flex justify-center gap-4">
+
+          {/* Responsive Buttons */}
+          <div className="flex flex-wrap justify-center gap-4">
             <Button
               variant="outline"
-              className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20"
+              className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20 w-full sm:w-auto"
               onClick={() => navigate('/vote')}
             >
               <Calendar className="h-5 w-5 mr-2" />
@@ -101,7 +103,7 @@ export default function Landing() {
             </Button>
             <Button
               variant="outline"
-              className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20"
+              className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20 w-full sm:w-auto"
               onClick={() => window.scrollBy({ top: 800, behavior: 'smooth' })}
             >
               <MapPin className="h-5 w-5 mr-2" />
@@ -109,7 +111,7 @@ export default function Landing() {
             </Button>
             <Button
               variant="outline"
-              className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20"
+              className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20 w-full sm:w-auto"
               onClick={() => navigate('/results')}
             >
               <Calendar className="h-5 w-5 mr-2" />
@@ -224,12 +226,6 @@ export default function Landing() {
                 Compare all destinations side-by-side or let our community help you choose
               </p>
               <div className="flex justify-center gap-4">
-                {/* <Button
-                  onClick={() => navigate('/manali')}
-                  className="px-8 h-12 text-base font-semibold"
-                >
-                  Compare All
-                </Button> */}
                 <Button
                   variant="outline"
                   onClick={() => navigate('/results')}
