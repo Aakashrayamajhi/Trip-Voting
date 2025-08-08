@@ -449,7 +449,7 @@ export default function Results() {
                                   ? "bg-thailand text-white"
                                   : vote.destination === "Manali"
                                     ? "bg-manali text-white"
-                                    : "bg-goa text-white"
+                                    : "bg-goa bg-blue-500  text-white"
                               }
                             >
                               {vote.destination}
