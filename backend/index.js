@@ -17,6 +17,10 @@ app.use(express.json());
 
 app.use("/api/vote", voteRoutes);
 
+app.get("/", (req, res) => {
+    res.send("Welcome to the Trip Vote API");
+});
+
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log("MongoDB connected");
