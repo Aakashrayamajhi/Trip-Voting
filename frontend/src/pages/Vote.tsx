@@ -109,7 +109,7 @@ export default function Vote() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${API_BASE}/api/vote`, {
+      const response = await fetch(`${API_BASE}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

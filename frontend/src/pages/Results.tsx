@@ -74,7 +74,7 @@ export default function Results() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/vote/stats`);
+      const res = await fetch(`${API_BASE}/stats`);
       if (!res.ok) throw new Error("Failed to fetch stats");
       const data = await res.json();
       setStats({
@@ -96,7 +96,7 @@ export default function Results() {
   const fetchAllVotes = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`${API_BASE}/api/vote/all`);
+      const res = await fetch(`${API_BASE}/all`);
       if (!res.ok) throw new Error("Failed to fetch votes");
       const data = await res.json();
       const formattedVotes = data.map((vote: any) => ({
