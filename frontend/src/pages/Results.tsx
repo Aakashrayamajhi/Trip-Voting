@@ -174,11 +174,14 @@ export default function Results() {
           "Thailand ek popular South East Asian country ho jasle beaches, temples, ra nightlife ko lagi chinieko xa. Bangkok, Phuket, Pattaya jasta thau haru dherai famous chan.",
           "Thailand ma dherai ramailo beaches ra temple haru chan. Ghumna janey haru lai manparcha.",
           "Thailand ekdam famous cha party ra tourism ko lagi, tapaslai pani ramailo huncha.",
+          "ghar ja",
+          "tero passport nai bandaina",
         ],
         goa: [
           "Goa India ko ekdam popular tourist destination ho jaha beaches, parties, casinos, ani shanti environment ko maja lina sakincha.",
           "Goa ko beach party sabai lai manparcha, shanti pani cha tyo thau ma.",
           "Goa ma majaa garna sakinchha, beaches ra nightlife dherai ramro cha.",
+          "tw pagal ho",
         ],
         manali: [
           "Manali ek hill station ho India ma, mostly couples, friends, ani adventure lovers haru ko lagi. Snow, trekking, paragliding, rafting sabai manparcha vane ghumna ja manparcha.",
@@ -189,6 +192,7 @@ export default function Results() {
           "Timi ghumna jaane sochda chau vane: Thailand for beaches, Goa for party vibes, Manali for hills & snow. Budget anusar suggestion dinu parcha vane sodh na.",
           "Ka janey plan cha bhane clear bhaye ma ramro suggestion dinchu. Timi lai kati din ko plan cha?",
           "Ramro ghumne thau chahiyo bhane tyo destination anusar kura garna sakincha.",
+          "ja jana man xa ja malai sutna de"
         ],
         greetings: [
           "Namaste! Kasto xa? Ghumna jane plan xa?",
@@ -199,6 +203,7 @@ export default function Results() {
           "You're welcome! Aru kura sodhna free chau.",
           "Dhanyabad! Kati ramro kura bhayo kura garera.",
           "Sadaiva khusi hunu hola! Aru sodhnus.",
+          "hahaha moj gar"
         ],
         chatbotInfo: [
           "Yes, ma ek travel assistant chatbot hu. Ghumna sambandhi jankari dinchu.",
@@ -210,6 +215,9 @@ export default function Results() {
           "Sorry, malai thaha chhaina tesko barema.",
           "Tesko barema malai janakari chhaina, aru sodhnus na.",
           "Malai thailand, manali, goa ko bare ma matrai sodha.",
+          "jpt na sodh malai",
+          "hos paye ra bol hai ma sanga",
+          "ea yr malai na chat ja chatgpt lai sodh"
         ],
       };
 
